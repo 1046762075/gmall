@@ -9,6 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.firenay.gmall</groupId>
+    <version>1.0-SNAPSHOT</version>
     <artifactId>gmall-web-util</artifactId>
 
     <dependencies>
@@ -18,10 +20,10 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-thymeleaf</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
@@ -35,7 +37,5 @@
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-ext</artifactId>
         </dependency>
-
     </dependencies>
-
 </project>

@@ -16,6 +16,8 @@
         <module>gmall-web-util</module>
         <module>gmall-user-manager</module>
         <module>gmall-order-web</module>
+        <module>gmall-manage-web</module>
+        <module>gmall-manage-service</module>
     </modules>
 
     <properties>
