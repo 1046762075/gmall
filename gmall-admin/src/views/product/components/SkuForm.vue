@@ -4,11 +4,11 @@
     <!--基本表单-->
     <el-form :model="skuForm" label-width="150px">
 
-      <el-form-item label="spu名称">
+      <el-form-item label="SPU名称">
         <span>{{ spuName }} </span>
       </el-form-item>
 
-      <el-form-item label="sku名称">
+      <el-form-item label="SKU名称">
         <el-input v-model="skuForm.skuName"/>
       </el-form-item>
 

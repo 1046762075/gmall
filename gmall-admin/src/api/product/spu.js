@@ -5,7 +5,7 @@ export default {
   // 根据三级分类id获取属性列表
   getSpuList(catalog3Id) {
     return request({
-      url: 'attrInfoList?catalog3Id=' + catalog3Id,
+      url: 'spuList?catalog3Id=' + catalog3Id,
       method: 'get'
     })
   },

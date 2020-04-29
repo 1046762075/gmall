@@ -2,11 +2,11 @@
   <!--表单-->
   <el-form :model="spuForm" label-width="70px">
 
-    <el-form-item label="spu名称">
+    <el-form-item label="SPU名称">
       <el-input v-model="spuForm.spuName"/>
     </el-form-item>
 
-    <el-form-item label="spu描述">
+    <el-form-item label="SPU描述">
       <el-input v-model="spuForm.description" :rows="5" type="textarea"/>
     </el-form-item>
 
@@ -21,7 +21,7 @@
         class="upload-demo"
         list-type="picture-card">
         <i class="el-icon-plus"/>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png/gif文件，且不超过2MB</div>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png/gif文件，且不超过5MB</div>
       </el-upload>
     </el-form-item>
 
@@ -42,7 +42,7 @@
             {{ scope.$index + 1 }}
           </template>
         </el-table-column>
-        <el-table-column label="销售属性id" width="100">
+        <el-table-column label="销售属性ID" width="100">
           <template slot-scope="scope">
             {{ scope.row.saleAttrId }}
           </template>
@@ -221,14 +221,14 @@ export default {
       const isJPG = file.type === 'image/jpeg'
       const isPNG = file.type === 'image/png'
       const isGIF = file.type === 'image/gif'
-      const isLt2M = file.size / 1024 / 1024 < 2
+      const isLt2M = file.size / 1024 / 1024 < 5
 
       if (!isJPG && !isPNG && !isGIF) {
         this.$message.error('上传头像图片只能是 JPG、PNG 或 GIF 格式!')
         return false
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+        this.$message.error('上传头像图片大小不能超过 5MB!')
         return false
       }
       return true
