@@ -1,12 +1,6 @@
 package com.firenay.gmall.service;
 
-import com.firenay.gmall.entity.BaseAttrInfo;
-import com.firenay.gmall.entity.BaseAttrValue;
-import com.firenay.gmall.entity.BaseCatalog1;
-import com.firenay.gmall.entity.BaseCatalog2;
-import com.firenay.gmall.entity.BaseCatalog3;
-import com.firenay.gmall.entity.BaseSaleAttr;
-import com.firenay.gmall.entity.SpuInfo;
+import com.firenay.gmall.entity.*;
 
 import java.util.List;
 
@@ -45,8 +39,6 @@ public interface ManageService {
 
 	/**
 	 * 根据平台属性Id 查询平台属性值集合
-	 * @param attrId
-	 * @return
 	 */
 	List<BaseAttrValue> getAttrValueList(String attrId);
 
@@ -71,4 +63,19 @@ public interface ManageService {
 	 * 保存商品的各个属性
 	 */
 	int saveSpuInfo(SpuInfo spuInfo);
+
+	/**
+	 * 获取所有的商品图片
+	 */
+	List<SpuImage> getSpuImageList(SpuImage spuImage);
+
+	/**
+	 * 根据spuID 获取销售属性
+	 */
+	List<SpuSaleAttr> getSpuSaleAttrList(String spuId);
+
+	/**
+	 * 保存SkuInfo数据
+	 */
+	int saveSkuInfo(SkuInfo skuInfo);
 }
