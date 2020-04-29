@@ -5,6 +5,8 @@ import com.firenay.gmall.entity.BaseAttrValue;
 import com.firenay.gmall.entity.BaseCatalog1;
 import com.firenay.gmall.entity.BaseCatalog2;
 import com.firenay.gmall.entity.BaseCatalog3;
+import com.firenay.gmall.entity.BaseSaleAttr;
+import com.firenay.gmall.entity.SpuInfo;
 
 import java.util.List;
 
@@ -54,4 +56,19 @@ public interface ManageService {
 	 * @return
 	 */
 	BaseAttrInfo getAttrInfo(String attrId);
+
+	/**
+	 * 根据SPU对象属性获取spuInfo集合
+	 */
+	List<SpuInfo> getSpuList(SpuInfo spuInfo);
+
+	/**
+	 * 获取所有的销售属性
+	 */
+	List<BaseSaleAttr> getBaseSaleAttrList();
+
+	/**
+	 * 保存商品的各个属性
+	 */
+	int saveSpuInfo(SpuInfo spuInfo);
 }
