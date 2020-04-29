@@ -6,7 +6,10 @@ import com.firenay.gmall.entity.BaseAttrValue;
 import com.firenay.gmall.entity.BaseCatalog1;
 import com.firenay.gmall.entity.BaseCatalog2;
 import com.firenay.gmall.entity.BaseCatalog3;
+import com.firenay.gmall.entity.BaseSaleAttr;
+import com.firenay.gmall.entity.SpuInfo;
 import com.firenay.gmall.service.ManageService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,7 @@ import java.util.List;
 @RestController
 // 跨域请求
 @CrossOrigin
+@Slf4j
 public class ManageController {
 
 	@Reference
@@ -65,18 +69,32 @@ public class ManageController {
 	}
 
 
-
 	@RequestMapping("saveAttrInfo")
 	public void saveAttrInfo(@RequestBody BaseAttrInfo baseAttrInfo){
-		System.out.println(baseAttrInfo);
 		manageService.saveAttrInfo(baseAttrInfo);
 	}
 
 	@RequestMapping("getAttrValueList")
 	public List<BaseAttrValue> getAttrValueList(String attrId){
+		log.info("查询" + attrId + "号种类");
 		// 获取 fireany 商城已有商品
 		BaseAttrInfo attrInfo = manageService.getAttrInfo(attrId);
 		// 查询已有的商品
 		return attrInfo.getAttrValueList();
 	}
+
+	@RequestMapping("baseSaleAttrList")
+	public List<BaseSaleAttr> baseSaleAttrList(){
+		return manageService.getBaseSaleAttrList();
+	}
+
+	@RequestMapping("saveSpuInfo")
+	public void saveSpuInfo(@RequestBody SpuInfo spuInfo){
+		String flag = "保存失败";
+		if(spuInfo != null){
+			flag = manageService.saveSpuInfo(spuInfo) > 0 ? "保存成功":"保存失败";
+		}
+		log.info(flag + spuInfo);
+	}
+
 }
