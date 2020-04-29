@@ -1,16 +1,8 @@
 package com.firenay.gmall.service.Impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.firenay.gmall.entity.BaseAttrInfo;
-import com.firenay.gmall.entity.BaseAttrValue;
-import com.firenay.gmall.entity.BaseCatalog1;
-import com.firenay.gmall.entity.BaseCatalog2;
-import com.firenay.gmall.entity.BaseCatalog3;
-import com.firenay.gmall.mapper.BaseAttrInfoMapper;
-import com.firenay.gmall.mapper.BaseAttrValueMapper;
-import com.firenay.gmall.mapper.BaseCatalog1Mapper;
-import com.firenay.gmall.mapper.BaseCatalog2Mapper;
-import com.firenay.gmall.mapper.BaseCatalog3Mapper;
+import com.firenay.gmall.entity.*;
+import com.firenay.gmall.mapper.*;
 import com.firenay.gmall.service.ManageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +32,22 @@ public class ManageServiceImpl implements ManageService {
 	private BaseAttrInfoMapper baseAttrInfoMapper;
 
 	@Autowired
+	private SpuInfoMapper spuInfoMapper;
+
+	@Autowired
 	private BaseAttrValueMapper baseAttrValueMapper;
+
+	@Autowired
+	private BaseSaleAttrMapper baseSaleAttrMapper;
+
+	@Autowired
+	private SpuSaleAttrMapper spuSaleAttrMapper;
+
+	@Autowired
+	private SpuImageMapper spuImageMapper;
+
+	@Autowired
+	private SpuSaleAttrValueMapper spuSaleAttrValueMapper;
 
 
 	@Override
@@ -115,5 +122,52 @@ public class ManageServiceImpl implements ManageService {
 		List<BaseAttrValue> baseAttrValueList = baseAttrValueMapper.select(new BaseAttrValue(attrId));
 		baseAttrInfo.setAttrValueList(baseAttrValueList);
 		return baseAttrInfo;
+	}
+
+	@Override
+	public List<SpuInfo> getSpuList(SpuInfo spuInfo) {
+		return spuInfoMapper.select(spuInfo);
+	}
+
+	@Override
+	public List<BaseSaleAttr> getBaseSaleAttrList() {
+		return baseSaleAttrMapper.selectAll();
+	}
+
+	/**
+	 * 保存商品的各个属性
+	 */
+	@Override
+	@Transactional
+	public int saveSpuInfo(SpuInfo spuInfo) {
+		// 保存数据的具体实现
+		spuInfoMapper.insertSelective(spuInfo);
+
+		List<SpuImage> spuImageList = spuInfo.getSpuImageList();
+		if(spuImageList != null && spuImageList.size() > 0){
+			// 保存图片
+			for (SpuImage spuImage : spuImageList) {
+				spuImage.setSpuId(spuInfo.getId());
+				spuImageMapper.insertSelective(spuImage);
+			}
+		}
+
+		List<SpuSaleAttr> spuSaleAttrList = spuInfo.getSpuSaleAttrList();
+		if (spuSaleAttrList != null && spuSaleAttrList.size() > 0){
+			for (SpuSaleAttr spuSaleAttr : spuSaleAttrList) {
+				spuSaleAttr.setSpuId(spuInfo.getId());
+				spuSaleAttrMapper.insertSelective(spuSaleAttr);
+
+				// 保存商品的子属性
+				List<SpuSaleAttrValue> attrValueList = spuSaleAttr.getSpuSaleAttrValueList();
+				if(attrValueList != null && attrValueList.size() > 0){
+					for (SpuSaleAttrValue attrValue : attrValueList) {
+						attrValue.setSpuId(spuInfo.getId());
+						spuSaleAttrValueMapper.insertSelective(attrValue);
+					}
+				}
+			}
+		}
+		return 1;
 	}
 }
