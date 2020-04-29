@@ -231,4 +231,12 @@ public class ManageServiceImpl implements ManageService {
 		}
 		return 1;
 	}
+
+	/**
+	 * 根据SkuId查询所有东西
+	 */
+	@Override
+	public SkuInfo getSkuInfo(String skuId) {
+		return skuInfoMapper.selectByPrimaryKey(skuId);
+	}
 }
