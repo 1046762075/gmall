@@ -1,7 +1,11 @@
-com\firenay\gmall\entity\BaseAttrValue.class
-com\firenay\gmall\entity\BaseCatalog1.class
 com\firenay\gmall\entity\BaseCatalog3.class
 com\firenay\gmall\entity\UserInfo.class
+com\firenay\gmall\entity\SkuInfo.class
+com\firenay\gmall\entity\SkuImage.class
+com\firenay\gmall\entity\BaseAttrValue.class
+com\firenay\gmall\entity\BaseCatalog1.class
 com\firenay\gmall\entity\BaseSaleAttr.class
+com\firenay\gmall\entity\SkuAttrValue.class
 com\firenay\gmall\entity\BaseCatalog2.class
+com\firenay\gmall\entity\SkuSaleAttrValue.class
 com\firenay\gmall\entity\BaseAttrInfo.class
