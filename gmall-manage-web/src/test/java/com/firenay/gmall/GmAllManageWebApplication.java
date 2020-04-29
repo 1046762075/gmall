@@ -24,7 +24,7 @@ public class GmAllManageWebApplication {
 		TrackerClient trackerClient = new TrackerClient();
 		TrackerServer trackerServer = trackerClient.getTrackerServer();
 		StorageClient storageClient = new StorageClient(trackerServer, null);
-		String orginalFilename = "F:/Dev/桌面/StartupWp.jpg";
+		String orginalFilename = "C:\\Users\\root\\Desktop\\5a38e39b2975e837.jpg";
 		String extName = StringUtils.substringAfterLast(orginalFilename, ".");
 		String[] upload_file = storageClient.upload_file(orginalFilename, extName, null);
 		for (int i = 0; i < upload_file.length; i++) {
@@ -45,7 +45,7 @@ public class GmAllManageWebApplication {
 		String groupName = "group1";
 		String path = "M00/00/00/";
 
-		if(storageClient.delete_file(groupName,path + "CisBNF6oPgOAOXjhAADfnMDJkAM088.jpg") == 0){
+		if(storageClient.delete_file(groupName,path + "CisBNF6pMjWAOu67AAApB7V0h9U383.png") == 0){
 			System.out.println("删除成功");
 		}
 

@@ -97,5 +97,4 @@ public class ManageController {
 		log.info(flag + ": " + spuInfo);
 		return flag;
 	}
-
 }
