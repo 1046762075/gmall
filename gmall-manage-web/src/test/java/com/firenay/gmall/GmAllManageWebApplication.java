@@ -34,4 +34,23 @@ public class GmAllManageWebApplication {
 //			s = M00/00/00/CisBNF6oIdqAeWkJAAifB5wykMs818.jpg
 		}
 	}
+
+	@Test
+	public void textFileDel() throws IOException, MyException {
+		String file = this.getClass().getResource("/tracker.conf").getFile();
+		ClientGlobal.init(file);
+		TrackerClient trackerClient = new TrackerClient();
+		TrackerServer trackerServer = trackerClient.getTrackerServer();
+		StorageClient storageClient = new StorageClient(trackerServer, null);
+		String groupName = "group1";
+		String path = "M00/00/00/";
+
+		if(storageClient.delete_file(groupName,path + "CisBNF6oPgOAOXjhAADfnMDJkAM088.jpg") == 0){
+			System.out.println("删除成功");
+		}
+
+		// update order_detail set img_url = null ;
+		// select img_url from order_detail where !(img_url is null);
+		// DELETE FROM test
+	}
 }

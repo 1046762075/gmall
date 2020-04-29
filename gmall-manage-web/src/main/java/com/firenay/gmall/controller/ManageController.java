@@ -89,12 +89,13 @@ public class ManageController {
 	}
 
 	@RequestMapping("saveSpuInfo")
-	public void saveSpuInfo(@RequestBody SpuInfo spuInfo){
+	public String saveSpuInfo(@RequestBody SpuInfo spuInfo){
 		String flag = "保存失败";
 		if(spuInfo != null){
 			flag = manageService.saveSpuInfo(spuInfo) > 0 ? "保存成功":"保存失败";
 		}
-		log.info(flag + spuInfo);
+		log.info(flag + ": " + spuInfo);
+		return flag;
 	}
 
 }
