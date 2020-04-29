@@ -10,7 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.List;
-
+/**
+ * <p>Title: UserInfo</p>
+ * Description：
+ * date：2020/4/26 19:24
+ */
 @Data
 @NoArgsConstructor
 public class BaseAttrInfo implements Serializable {

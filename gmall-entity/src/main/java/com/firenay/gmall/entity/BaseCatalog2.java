@@ -6,7 +6,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
-
+/**
+ * <p>Title: UserInfo</p>
+ * Description：
+ * date：2020/4/26 19:24
+ */
 @Data
 @NoArgsConstructor
 public class BaseCatalog2 implements Serializable {

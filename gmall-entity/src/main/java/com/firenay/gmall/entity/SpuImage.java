@@ -1,7 +1,6 @@
 package com.firenay.gmall.entity;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -9,23 +8,21 @@ import java.io.Serializable;
 /**
  * <p>Title: UserInfo</p>
  * Description：
- * date：2020/4/26 21:24
+ * date：2020/4/28 21:40
  */
 @Data
-@NoArgsConstructor
-public class BaseAttrValue implements Serializable {
+public class SpuImage  implements Serializable {
 
-    @Id
     @Column
+    @Id
     private String id;
 
     @Column
-    private String valueName;
+    private String spuId;
 
     @Column
-    private String attrId;
+    private String imgName;
 
-	public BaseAttrValue(String attrId) {
-		this.attrId = attrId;
-	}
+    @Column
+    private String imgUrl;
 }
