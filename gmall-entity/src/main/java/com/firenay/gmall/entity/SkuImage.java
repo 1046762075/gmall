@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * <p>Title: SkuImgage</p>
+ * <p>Title: SkuImage</p>
  * Description：
  * date：2020/4/29 14:30
  */
