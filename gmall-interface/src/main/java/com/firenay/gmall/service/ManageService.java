@@ -78,4 +78,9 @@ public interface ManageService {
 	 * 保存SkuInfo数据
 	 */
 	int saveSkuInfo(SkuInfo skuInfo);
+
+	/**
+	 * 根据 SkuId 查询SkuInfo
+	 */
+	SkuInfo getSkuInfo(String skuId);
 }
