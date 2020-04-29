@@ -49,6 +49,18 @@ public class ManageServiceImpl implements ManageService {
 	@Autowired
 	private SpuSaleAttrValueMapper spuSaleAttrValueMapper;
 
+	@Autowired
+	private SkuInfoMapper skuInfoMapper;
+
+	@Autowired
+	private SkuAttrValueMapper skuAttrValueMapper;
+
+	@Autowired
+	private SkuImageMapper skuImageMapper;
+
+	@Autowired
+	private SkuSaleAttrValueMapper skuSaleAttrValueMapper;
+
 
 	@Override
 	public List<BaseCatalog1> getBaseCatalog1() {
@@ -65,9 +77,15 @@ public class ManageServiceImpl implements ManageService {
 		return baseCatalog3Mapper.select(new BaseCatalog3(catalog2Id));
 	}
 
+	/**
+	 * http://localhost:520/attrInfoList?catalog3Id=36
+	 * [{"id":"113","attrName":"最初的梦想","catalog3Id":"36","attrValueList":null}]
+	 * 自定义联合查询
+	 */
 	@Override
 	public List<BaseAttrInfo> getAttrList(String catalog3Id) {
-		return baseAttrInfoMapper.select(new BaseAttrInfo(catalog3Id));
+//		return baseAttrInfoMapper.select(new BaseAttrInfo(catalog3Id));
+		return baseAttrInfoMapper.getBaseAttrInfoListByCatalog3Id(catalog3Id);
 	}
 
 	/**
@@ -167,6 +185,49 @@ public class ManageServiceImpl implements ManageService {
 					}
 				}
 			}
+		}
+		return 1;
+	}
+
+	@Override
+	public List<SpuImage> getSpuImageList(SpuImage spuImage) {
+		return spuImageMapper.select(spuImage);
+	}
+
+	/**
+	 *
+	 * @SQL内连接： SELECT * FROM spu_sale_attr sav INNER JOIN spu_sale_attr_value ssav
+	 * 		ON sav.sale_attr_id = ssav.sale_attr_id  AND  sav.spu_id = ssav.spu_id WHERE sav.spu_id = 68;
+	 */
+	@Override
+	public List<SpuSaleAttr> getSpuSaleAttrList(String spuId) {
+		return spuSaleAttrMapper.selectSpuSaleAttrList(spuId);
+	}
+
+	@Override
+	@Transactional
+	public int saveSkuInfo(SkuInfo skuInfo) {
+			// skuInfo 中不为 null 的值全部保存
+		skuInfoMapper.insertSelective(skuInfo);
+		List<SkuImage> skuImageList = skuInfo.getSkuImageList();
+		for (SkuImage image : skuImageList) {
+			image.setSkuId(skuInfo.getId());
+			skuImageMapper.insertSelective(image);
+		}
+
+		// 保存销售属性
+		List<SkuAttrValue> attrValueList = skuInfo.getSkuAttrValueList();
+		if (attrValueList != null && attrValueList.size() > 0){
+			for (SkuAttrValue attrValue : attrValueList) {
+				attrValue.setSkuId(skuInfo.getId());
+				skuAttrValueMapper.insertSelective(attrValue);
+			}
+		}
+
+		List<SkuSaleAttrValue> saleAttrValueList = skuInfo.getSkuSaleAttrValueList();
+		for (SkuSaleAttrValue saleAttrValue : saleAttrValueList) {
+			saleAttrValue.setSkuId(skuInfo.getId());
+			skuSaleAttrValueMapper.insertSelective(saleAttrValue);
 		}
 		return 1;
 	}
