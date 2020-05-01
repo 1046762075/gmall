@@ -31,7 +31,6 @@ public class ItemController {
 	// 控制器
 	@RequestMapping("{skuId}.html")
 	public String item(@PathVariable String skuId, HttpServletRequest request){
-		log.info("用户访问：" + skuId + "号商品");
 		// 根据 skuId 获取数据
 		SkuInfo skuInfo = manageService.getSkuInfo(skuId);
 		// 查询销售属性，销售属性值集合 spuId，skuId
@@ -61,10 +60,19 @@ public class ItemController {
 				key = "";
 			}
 		}
-		// 将map 转换为json 字符串
+		// 将map 转换为json 字符串 "用户访问：" + skuId + "号商品"
 		String valuesSkuJson  = JSON.toJSONString(map);
-		System.out.println("拼接Json [SaleAttrValueId... : skuId] => " + valuesSkuJson);
-
+		int i = 0;
+		key ="\n用户访问：" + skuId + "号商品	拼接JSON [SaleAttrValueId... : skuId] => \n";
+		for (String mapK : map.keySet()) {
+			key += mapK + " : " + map.get(mapK) + "号";
+			if(++i % 3 != 0){
+				key +=  "\t";
+			} else {
+				key += "\r\n";
+			}
+		}
+		log.info(key);
 		// 保存json
 		request.setAttribute("valuesSkuJson", valuesSkuJson);
 		request.setAttribute("spuSaleAttrList", spuSaleAttrList);
