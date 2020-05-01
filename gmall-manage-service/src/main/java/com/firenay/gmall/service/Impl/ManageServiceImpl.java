@@ -1,14 +1,25 @@
 package com.firenay.gmall.service.Impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
+import com.firenay.gmall.config.RedisUtils;
+import com.firenay.gmall.constant.ManageConst;
 import com.firenay.gmall.entity.*;
 import com.firenay.gmall.mapper.*;
 import com.firenay.gmall.service.ManageService;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.Redisson;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.params.SetParams;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>Title: ManageServiceImpl</p>
@@ -60,6 +71,15 @@ public class ManageServiceImpl implements ManageService {
 
 	@Autowired
 	private SkuSaleAttrValueMapper skuSaleAttrValueMapper;
+
+	@Autowired
+	private RedisUtils redisUtils;
+
+	@Value("${spring.redis.host}")
+	private String host;
+
+	@Value("${spring.redis.port}")
+	private int port;
 
 
 	@Override
@@ -233,12 +253,106 @@ public class ManageServiceImpl implements ManageService {
 	}
 
 	/**
-	 * 根据SkuId查询所有东西
+	 * 根据SkuId查询所有东西 [搭建了redis + redis分布式锁]
 	 */
 	@Override
 	public SkuInfo getSkuInfo(String skuId) {
+		return getSkuInfoRedis(skuId);		//用自己的锁的方式
+
+//		return getSkuInfoRedisson(skuId);
+	}
+
+	/**
+	 * 利用 redisson 分布式锁
+	 */
+	private SkuInfo getSkuInfoRedisson(String skuId) {
+		SkuInfo skuInfo =null;
+		Jedis redis = null;
+		RLock nayLock = null;
+		try {
+			Config config = new Config();
+			config.useSingleServer().setAddress("redis://" + host + ":" + port);
+			RedissonClient redissonClient = Redisson.create(config);
+			// 创建锁
+			nayLock = redissonClient.getLock("fireNayLock");
+			nayLock.lock(5, TimeUnit.SECONDS);
+			// 开始写业务逻辑
+			redis = redisUtils.getRedis();
+			String skuKey = ManageConst.SKUKEY_PREFIX + skuId + ManageConst.SKUKEY_SUFFIX;
+			// 跟自己写的那个一样 判断是否存在 skuKey
+			if(redis.exists(skuKey)){
+				String skuJson = redis.get(skuKey);
+				skuInfo = JSON.parseObject(skuJson, SkuInfo.class);
+			}else{
+				skuInfo = getSkuInfoDB(skuId);
+				redis.setex(skuKey, ManageConst.SKUKEY_TIMEOUT, JSON.toJSONString(skuInfo));
+				log.info(skuId + "号缓存添加完毕");
+			}
+		} catch (Exception e) {
+			skuInfo = getSkuInfoDB(skuId);
+			System.out.println("======================================================redis挂了======================================================");
+		} finally {
+			if (redis != null){
+				redis.close();
+			}
+			if (nayLock != null){
+				nayLock.unlock();
+			}
+			return skuInfo;
+		}
+	}
+
+	/**
+	 * 自己的 redis 分布式锁
+	 */
+	private SkuInfo getSkuInfoRedis(String skuId) {
+		SkuInfo skuInfo = null;
+		Jedis redis = null;
+		try {
+			redis = redisUtils.getRedis();
+			//		redis.set("lsl","加油！！！");
+			String skuKey = ManageConst.SKUKEY_PREFIX + skuId + ManageConst.SKUKEY_SUBFIX;
+			String skuJson = redis.get(skuKey);
+			if(skuJson == null){
+				log.warn("正在添加缓存");
+				// sku:skuId:lock
+				String skuLockKey = ManageConst.SKUKEY_PREFIX + skuId + ManageConst.SKUKEY_SUFFIX;
+				// 对不存在的外键进行设置会返回 OK										nx防止键存在发生冲突	px 为属性设置存活时间
+				String lockKey = redis.set(skuLockKey, "加油！！！", SetParams.setParams().nx().px(ManageConst.SKULOCK_EXPIRE_PX));
+				if("OK".equals(lockKey)){
+					// 此时加锁成功  从DB查询数据转成String设置进去
+					skuInfo = getSkuInfoDB(skuId);
+					String skuRedis = JSON.toJSONString(skuInfo);
+					redis.setex(skuKey, ManageConst.SKUKEY_TIMEOUT, skuRedis);
+					// 删除锁 不删除外面的都进不来
+					redis.del(skuLockKey);
+					log.info(skuId + "号缓存添加完毕");
+				} else {
+					// 其他的人等一会继续调用
+					Thread.sleep(200);
+					return getSkuInfo(skuId);
+				}
+			} else {
+				// 有缓存直接转换走 finally
+				skuInfo = JSON.parseObject(skuJson, SkuInfo.class);
+			}
+		} catch (Exception e) {
+			skuInfo = getSkuInfoDB(skuId);
+			System.out.println("======================================================redis挂了======================================================");
+		} finally {
+			if(redis != null){
+				redis.close();
+			}
+			return skuInfo;
+		}
+	}
+
+	/**
+	 * 从数据库查询Sku所有信息[包括图片]
+	 */
+	private SkuInfo getSkuInfoDB(String skuId) {
+		// 直接将skuImageList 放入skuInfo 中！
 		SkuInfo skuInfo = skuInfoMapper.selectByPrimaryKey(skuId);
-		// 顺便查询完图片
 		skuInfo.setSkuImageList(getSkuImageBySkuId(skuId));
 		return skuInfo;
 	}
