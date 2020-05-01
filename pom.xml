@@ -39,7 +39,7 @@
         <httpclient.version>4.5.12</httpclient.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <mapper-starter.version>2.1.5</mapper-starter.version>
-        <jedis.version>3.1.0</jedis.version>
+        <jedis.version>3.2.0</jedis.version>
         <jest.version>6.3.1</jest.version>
         <jna.version>5.5.0</jna.version>
         <beanUtils.version>1.9.4</beanUtils.version>
