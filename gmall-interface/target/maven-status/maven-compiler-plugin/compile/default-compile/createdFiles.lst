@@ -1,2 +1,3 @@
 com\firenay\gmall\service\ManageService.class
 com\firenay\gmall\service\UserService.class
+com\firenay\gmall\service\ListService.class
