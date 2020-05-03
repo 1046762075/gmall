@@ -33,7 +33,6 @@ public class RedisUtils {
 	 */
 	public static final int TimeOut = 1;
 
-
 	/**
 	 *
 	 * @param dataBase 连接几号库
