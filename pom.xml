@@ -19,6 +19,8 @@
         <module>gmall-manage-web</module>
         <module>gmall-manage-service</module>
         <module>gmall-item-web</module>
+        <module>gmall-list-service</module>
+        <module>gmall-list-web</module>
     </modules>
 
     <properties>
@@ -34,8 +36,8 @@
         <mybatis.version>2.1.1</mybatis.version>
         <nekohtml.version>1.9.22</nekohtml.version>
         <xml-apis.version>1.4.01</xml-apis.version>
-        <batik-ext.version>1.12</batik-ext.version>
-        <jsoup.version>1.13.1</jsoup.version>
+        <batik-ext.version>1.9.1</batik-ext.version>
+        <jsoup.version>1.11.2</jsoup.version>
         <httpclient.version>4.5.12</httpclient.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <mapper-starter.version>2.1.5</mapper-starter.version>
