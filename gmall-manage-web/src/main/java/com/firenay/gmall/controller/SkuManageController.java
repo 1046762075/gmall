@@ -2,10 +2,13 @@ package com.firenay.gmall.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.firenay.gmall.entity.SkuInfo;
+import com.firenay.gmall.entity.SkuLsInfo;
 import com.firenay.gmall.entity.SpuImage;
 import com.firenay.gmall.entity.SpuSaleAttr;
+import com.firenay.gmall.service.ListService;
 import com.firenay.gmall.service.ManageService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +18,7 @@ import java.util.List;
 
 /**
  * <p>Title: SkuManageController</p>
- * Description：
+ * Description：Sku的数据的查询与保存到ES
  * date：2020/4/29 11:12
  */
 @RestController
@@ -25,6 +28,9 @@ public class SkuManageController {
 
 	@Reference
 	private ManageService manageService;
+
+	@Reference
+	private ListService listService;
 
 
 	@RequestMapping("spuImageList")
@@ -51,5 +57,20 @@ public class SkuManageController {
 		}
 		log.info(flag + ": " + skuInfo);
 		return flag;
+	}
+
+	/**
+	 * 上传一个商品
+	 */
+	@RequestMapping("/onSale")
+	public void onSale(String skuId){
+
+		SkuLsInfo skuLsInfo = new SkuLsInfo();
+
+		SkuInfo skuInfo = manageService.getSkuInfo(skuId);
+
+		// 从skuInfo拷贝数据到skuLsInfo
+		BeanUtils.copyProperties(skuInfo, skuLsInfo);
+		listService.saveSkuLsInfo(skuLsInfo);
 	}
 }
