@@ -1,6 +1,7 @@
 package com.firenay.gmall.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * date：2020/4/29 14:35
  */
 @Data
+@NoArgsConstructor
 public class SkuAttrValue implements Serializable {
 
 	@Id
@@ -26,4 +28,8 @@ public class SkuAttrValue implements Serializable {
 
 	@Column
 	private String skuId;
+
+	public SkuAttrValue(String skuId) {
+		this.skuId = skuId;
+	}
 }
