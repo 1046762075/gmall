@@ -15,8 +15,8 @@
 
     <dependencies>
         <dependency>
-            <artifactId>gmall-common-util</artifactId>
             <groupId>com.fireany.gmall</groupId>
+            <artifactId>gmall-common-util</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
