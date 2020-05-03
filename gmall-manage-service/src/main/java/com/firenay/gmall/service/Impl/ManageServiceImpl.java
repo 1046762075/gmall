@@ -354,6 +354,8 @@ public class ManageServiceImpl implements ManageService {
 		// 直接将skuImageList 放入skuInfo 中！
 		SkuInfo skuInfo = skuInfoMapper.selectByPrimaryKey(skuId);
 		skuInfo.setSkuImageList(getSkuImageBySkuId(skuId));
+		// 查询平台属性值 方便保存到ES
+		skuInfo.setSkuAttrValueList(skuAttrValueMapper.select(new SkuAttrValue(skuId)));
 		return skuInfo;
 	}
 

@@ -6,6 +6,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import tk.mybatis.spring.annotation.MapperScan;
 
+/**
+ * 服务于8084
+ */
 // 这里使用了 redis 就去扫描 redis 的组件
 @ComponentScan(basePackages = "com.firenay.gmall.config")
 @MapperScan(basePackages = "com.firenay.gmall.mapper")
@@ -13,7 +16,9 @@ import tk.mybatis.spring.annotation.MapperScan;
 @EnableTransactionManagement
 public class GmAllManageServiceApplication {
 
-		// 	http://localhost:8084/45.html
+	//  本地访问											nginx
+	// http://localhost:8084/{skuId}.html
+	// http://127.0.0.1:8084/45.html						http://item.firenay.com/45.html
 	public static void main(String[] args) {
 		SpringApplication.run(GmAllManageServiceApplication.class, args);
 	}

@@ -22,6 +22,4 @@ public class ManageConst {
 	public static final int SKULOCK_EXPIRE_PX = 1000;
 
 	public static final String SKUKEY_SUFFIX = ":lock";
-
-
 }
