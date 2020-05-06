@@ -1,6 +1,7 @@
 package com.firenay.gmall.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.firenay.gmall.config.RedisUtils;
 import com.firenay.gmall.entity.SkuLsInfo;
 import com.firenay.gmall.entity.SkuLsParams;
 import com.firenay.gmall.entity.SkuLsResult;
@@ -9,6 +10,7 @@ import io.searchbox.client.JestClient;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
 import io.searchbox.core.search.aggregation.MetricAggregation;
 import io.searchbox.core.search.aggregation.TermsAggregation;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +42,9 @@ public class ListServiceImpl implements ListService {
 
 	@Autowired
 	private JestClient jestClient;
+
+	@Autowired
+	private RedisUtils redisUtils;
 
 	/**
 	 * 这里的字段值必须跟ES中自定义Mapping中的保持一致
@@ -75,6 +81,31 @@ public class ListServiceImpl implements ListService {
 		}
 		SkuLsResult skuLsResult = makeResultForSearch(result,skuLsParams);
 		return skuLsResult;
+	}
+
+	@Override
+	public void incrHotScore(String skuId) {
+		Jedis redis = redisUtils.getRedis();
+		String hotKey = "hotScore";
+		Double count = redis.zincrby(hotKey, 1, "skuId" + skuId);
+		// 整除10就更新ES
+		if(count % 10 == 0){
+			updateHotScore(skuId , Math.round(count));
+		}
+	}
+
+	private void updateHotScore(String skuId, long round) {
+		String upd = "{\n" +
+				"  \"doc\": {\n" +
+				"     \"hotScore\": " + round + "\n" +
+				"  }\n" +
+				"}";
+		Update update = new Update.Builder(upd).index(ES_INDEX).type(ES_TYPE).id(skuId).build();
+		try {
+			jestClient.execute(update);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -171,7 +202,7 @@ public class ListServiceImpl implements ListService {
 		sourceBuilder.query(queryBuilder);
 
 		// 设置分页
-		int from = (skuLsParams.getPageNo()-1) * skuLsParams.getPageSize();
+		int from = (skuLsParams.getPageNo() - 1) * skuLsParams.getPageSize();
 		sourceBuilder.from(from);
 		sourceBuilder.size(skuLsParams.getPageSize());
 
