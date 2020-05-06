@@ -8,6 +8,7 @@ import com.firenay.gmall.entity.*;
 import com.firenay.gmall.mapper.*;
 import com.firenay.gmall.service.ManageService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.redisson.Redisson;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -381,5 +382,12 @@ public class ManageServiceImpl implements ManageService {
 	@Override
 	public List<SkuSaleAttrValue> getSkuSaleAttrValueListBySpu(String spuId) {
 		return skuSaleAttrValueMapper.selectSkuSaleAttrValueListBySpu(spuId);
+	}
+
+	@Override
+	public List<BaseAttrInfo> getAttrs(List<String> valueIdList) {
+		String valueIds = StringUtils.join(valueIdList.toArray(), ",");
+		System.out.println("values:" + valueIds);
+		return baseAttrInfoMapper.selectAttrInfoListByIds(valueIds);
 	}
 }
