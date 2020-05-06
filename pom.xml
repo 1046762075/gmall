@@ -21,6 +21,7 @@
         <module>gmall-item-web</module>
         <module>gmall-list-service</module>
         <module>gmall-list-web</module>
+        <module>gmall-passport-web</module>
     </modules>
 
     <properties>
