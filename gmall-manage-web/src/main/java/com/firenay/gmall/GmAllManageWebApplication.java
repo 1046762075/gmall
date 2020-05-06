@@ -2,7 +2,9 @@ package com.firenay.gmall;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
+@ComponentScan("com.firenay.gmall")
 @SpringBootApplication
 public class GmAllManageWebApplication {
 	//  本地访问												nginx
