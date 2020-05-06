@@ -20,4 +20,9 @@ public interface ListService {
 	 * 检数据
 	 */
 	SkuLsResult search(SkuLsParams skuLsParams);
+
+	/**
+	 * 记录每个商品被访问的次数
+	 */
+	void incrHotScore(String skuId);
 }

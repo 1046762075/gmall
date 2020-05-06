@@ -15,4 +15,14 @@ public interface UserService {
 	List<UserInfo> findAll();
 
 	List<UserAddress> getUserAddressList(String userId);
+
+	/**
+	 * 用户登录方法
+	 */
+	UserInfo login(UserInfo userInfo);
+
+	/**
+	 * 根据用户Id判断用户的token是否正确从而得知用户是否登录
+	 */
+	UserInfo verify(String userId);
 }

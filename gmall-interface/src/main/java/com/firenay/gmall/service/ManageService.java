@@ -100,4 +100,9 @@ public interface ManageService {
 	 * 根据sluId查询销售属性值集合
 	 */
 	List<SkuSaleAttrValue> getSkuSaleAttrValueListBySpu(String spuId);
+
+	/**
+	 * 根据平台属性值ID查询
+	 */
+	List<BaseAttrInfo> getAttrs(List<String> valueIdList);
 }
