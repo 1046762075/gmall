@@ -5,10 +5,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.io.Serializable;
 /**
  * <p>Title: UserInfo</p>
- * Description：
+ * Description：urlParam：存放面包屑的值
  * date：2020/4/26 21:24
  */
 @Data
@@ -24,6 +25,9 @@ public class BaseAttrValue implements Serializable {
 
     @Column
     private String attrId;
+
+    @Transient
+    private String urlParam;
 
 	public BaseAttrValue(String attrId) {
 		this.attrId = attrId;

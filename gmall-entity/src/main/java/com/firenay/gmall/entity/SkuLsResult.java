@@ -13,9 +13,9 @@ public class SkuLsResult implements Serializable {
 	 */
 	List<SkuLsInfo> skuLsInfoList;
 
-	long total;
+	long total = 1;
 
-	long totalPages;
+	long totalPages = 1;
 
 	List<String> attrValueIdList;
 }
