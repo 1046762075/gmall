@@ -70,17 +70,14 @@
       筛选条件
     </div>
     <i><img src="/image/right-@1x.png" alt=""></i>
-    <span th:if="${keyword}!=null" th:text="'&quot;'+${keyword}+'&quot;'">&quot;小米&quot;</span>
+    <span th:if="${keyword} != null" th:utext="${keyword}"></span>
     <!--http://127.0.0.1:8086/fireNaySearch.html?keyword=nova
     baseAttrValue.urlParam 保存的是最新的参数列表！
     -->
-    <a class="select-attr" th:text="${baseAttrValue.valueName}+'✖'"
-       th:href="'fireNaySearch.html?'+${baseAttrValue.urlParam}"
-       th:each="baseAttrValue: ${baseAttrValueList}"> 2G<b> ✖ </b>
+    <a class="select-attr" th:text="${Breaded.valueName}+'✖'"
+       th:href="'fireNaySearch.html?'+${Breaded.urlParam}"
+       th:each="Breaded: ${BreadCrumbs}"></b>
     </a>
-    <!-- <a class="select-attr"   href="#"      > 屏幕尺寸:5.1-5.5英寸<b> ✖ </b>
-    </a>-->
-
   </div>
 </div>
 
@@ -97,16 +94,14 @@
 
         <div class="GM_pre" th:each="baseAttrInfo: ${baseAttrInfoList}">
           <div class="sl_key">
-            <span th:text="${baseAttrInfo.attrName}">属性1111：</span>
+            <span th:text="${baseAttrInfo.attrName}"></span>
           </div>
           <div class="sl_value">
             <ul>
               <li th:each="attrValue: ${baseAttrInfo.attrValueList}">
-                <!--最新的跳转：http://list.gmall.com/fireNaySearch.html?keyword=手机&valueId=13
-                    ?keyword=手机&valueId=13 将控制器后面所有的参数制作成一个方法
-                -->
+                <!--最新的跳转：http://list.gmall.com/fireNaySearch.html?null&valueId=160 将控制器后面所有的参数制作成一个方法 -->
                 <a th:href="'fireNaySearch.html?'+${urlParam}+'&valueId='+${attrValue.id}"
-                   th:text="${attrValue.valueName}">属性值111</a>
+                   th:text="${attrValue.valueName}"></a>
               </li>
             </ul>
           </div>
@@ -184,7 +179,7 @@
                   </div>
                   <div class="mc_rev">
                     已有
-                    <a href="#" class="number">15600</a>
+                    <a href="#" class="number">99999</a>
                     人评价
                   </div>
                 </li>
@@ -220,7 +215,6 @@
               <p class="tab_R">
                 <span th:text="'¥'+${skuLsInfo.price}"></span>
               </p>
-              <!--  关键字高亮 所以用 utext 显示 <span>-->
               <a href="#" title="" th:onclick="'javascript:item('+${skuLsInfo.id}+')'" class="tab_JE"
                  th:utext="${skuLsInfo.skuName}">
               </a>
@@ -308,7 +302,6 @@
 <script src="/js/success.js"></script>
 <script language="JavaScript">
   function item(skuid) {
-    console.log("用户访问:" + skuid + "商品");
     window.location.href = "http://item.firenay.com/" + skuid + ".html";
   }
 
