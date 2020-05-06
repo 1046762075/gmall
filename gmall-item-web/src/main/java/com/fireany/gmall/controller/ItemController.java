@@ -2,9 +2,11 @@ package com.fireany.gmall.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
+import com.firenay.gmall.config.LoginRequire;
 import com.firenay.gmall.entity.SkuInfo;
 import com.firenay.gmall.entity.SkuSaleAttrValue;
 import com.firenay.gmall.entity.SpuSaleAttr;
+import com.firenay.gmall.service.ListService;
 import com.firenay.gmall.service.ManageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import java.util.List;
 /**
  * <p>Title: ItemController</p>
  * Description：前端页面展示
+ * 		这里被前置拦截器拦截 根据newToken获取 nickName
  * date：2020/4/29 21:13
  */
 @Controller
@@ -27,9 +30,13 @@ public class ItemController {
 	@Reference
 	private ManageService manageService;
 
+	@Reference
+	private ListService listService;
+
 	// localhost:8084/33.html
 	// 控制器
 	@RequestMapping("{skuId}.html")
+	@LoginRequire
 	public String item(@PathVariable String skuId, HttpServletRequest request){
 		// 根据 skuId 获取数据
 		SkuInfo skuInfo = manageService.getSkuInfo(skuId);
@@ -63,7 +70,7 @@ public class ItemController {
 		// 将map 转换为json 字符串 "用户访问：" + skuId + "号商品"
 		String valuesSkuJson  = JSON.toJSONString(map);
 		int i = 0;
-		key ="\n用户访问：" + skuId + "号商品	拼接JSON [SaleAttrValueId... : skuId] => \n";
+		key ="\n用户访问：" + skuId + "号商品,	拼接JSON [SaleAttrValueId... : skuId] => \n";
 		for (String mapK : map.keySet()) {
 			key += mapK + " : " + map.get(mapK) + "号";
 			if(++i % 3 != 0){
@@ -78,6 +85,8 @@ public class ItemController {
 		request.setAttribute("spuSaleAttrList", spuSaleAttrList);
 		// 保存到作用域
 		request.setAttribute("skuInfo",skuInfo);
+		// 商品访问次数+1
+		listService.incrHotScore(skuId);
 		return "item";
 	}
 }
