@@ -48,7 +48,7 @@
         <beanUtils.version>1.9.4</beanUtils.version>
         <!--     自己的包  -->
         <mysql.version>5.1.47</mysql.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <hutool.version>5.3.2</hutool.version>
     </properties>
 
